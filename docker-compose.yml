@@ -1,0 +1,45 @@
+version: '3.3'
+services:
+  db1:
+    image: mysql:latest
+    ports:
+      - "${DB1_PORT}:3306"
+    environment:
+      - MYSQL_DATABASE=${DB1_DATABASE}
+      - MYSQL_USER=${DB1_USER}
+      - MYSQL_PASSWORD=${DB1_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+      - ./db/init_phpapp:/docker-entrypoint-initdb.d
+
+  db2:
+    image: mysql:latest
+    ports:
+      - "${DB2_PORT}:3306"
+    environment:
+      - MYSQL_DATABASE=${DB2_DATABASE}
+      - MYSQL_USER=${DB2_USER}
+      - MYSQL_PASSWORD=${DB2_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+      - ./db/init_soap:/docker-entrypoint-initdb.d
+
+  db3:
+    image: mysql:latest
+    ports:
+      - "${DB3_PORT}:3306"
+    environment:
+      - MYSQL_DATABASE=${DB3_DATABASE}
+      - MYSQL_USER=${DB3_USER}
+      - MYSQL_PASSWORD=${DB3_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+      - ./db/init_rest:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "${PMA_PORT}:80"
+    environment:
+      - PMA_HOSTS=db1,db2,db3
+      - PMA_PORT=3306
