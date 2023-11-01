@@ -1,5 +1,20 @@
 version: '3.3'
 services:
+  www:
+    image: php:8.0-apache
+    volumes:
+      - "../PHP_App:/var/www/html"
+    ports:
+      - ${WEB_PORT}:80
+      - 443:443
+
+  soap-service:
+    build:
+      context: ../SOAP_Service
+      dockerfile: Dockerfile
+    ports:
+      - ${SOAP_PORT}:${SOAP_PORT}
+      
   db1:
     image: mysql:latest
     ports:
