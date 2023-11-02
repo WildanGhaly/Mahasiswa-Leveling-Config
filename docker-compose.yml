@@ -1,19 +1,80 @@
 version: '3.3'
 services:
-  www:
-    image: php:8.0-apache
-    volumes:
-      - "../PHP_App:/var/www/html"
-    ports:
-      - ${WEB_PORT}:80
-      - 443:443
+  mhslvl-app:
+    extends:
+      file: ../PHP_App/docker-compose.yml
+      service: mhslvl-app
 
-  soap-service:
-    build:
-      context: ../SOAP_Service
-      dockerfile: Dockerfile
-    ports:
-      - ${SOAP_PORT}:${SOAP_PORT}
+  # mhslvl-app-db:
+  #   env_file:
+  #     - ../PHP_App/.env
+  #   extends:
+  #     file: ../PHP_App/docker-compose.yml
+  #     service: mhslvl-app-db
+
+  # phpmyadmin:
+  #   env_file:
+  #     - ../PHP_App/.env
+  #   extends:
+  #     file: ../PHP_App/docker-compose.yml
+  #     service: phpmyadmin
+  
+  # Client_SPA:
+  mhslvl-client-spa:
+    extends:
+      file: ../Client_SPA/docker-compose.yml
+      service: mhslvl-client-spa
+  
+  # SOAP_Service:
+  mhslvl-soap:
+    extends:
+      file: ../SOAP_Service/docker-compose.yml
+      service: mhslvl-soap
+  
+  # mhslvl-soap-db:
+  #   extends:
+  #     file: ../SOAP_Service/docker-compose.yml
+  #     service: mhslvl-soap-db
+  
+  # REST_Service:
+  mhslvl-rest:
+    extends:
+      file: ../REST_Service/docker-compose.yml
+      service: mhslvl-rest
+
+  # mhslvl-rest-db:
+  #   extends:
+  #     file: ../REST_Service/docker-compose.yml
+  #     service: mhslvl-rest-db
+
+  # express-app:
+  #   build:
+  #     context: ../REST_Service
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     DB_HOST: db2
+  #     DB_USER: ${DB2_USER}
+  #     DB_PASSWORD: ${DB2_PASSWORD}
+  #     DB_PORT: ${DB2_PORT}
+  #     DB_DATABASE: ${DB2_DATABASE}
+  #   depends_on:
+  #     - db2
+      
+  # www:
+  #   image: php:8.0-apache
+  #   volumes:
+  #     - "../PHP_App:/var/www/html"
+  #   ports:
+  #     - ${WEB_PORT}:80
+  #     - 443:443
+
+  # soap-service:
+  #   build:
+  #     context: ../SOAP_Service
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - ${SOAP_PORT}:${SOAP_PORT}
       
   db1:
     image: mysql:latest
@@ -39,22 +100,22 @@ services:
     volumes:
       - ./db/init_soap:/docker-entrypoint-initdb.d
 
-  db3:
-    image: mysql:latest
-    ports:
-      - "${DB3_PORT}:3306"
-    environment:
-      - MYSQL_DATABASE=${DB3_DATABASE}
-      - MYSQL_USER=${DB3_USER}
-      - MYSQL_PASSWORD=${DB3_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=1
-    volumes:
-      - ./db/init_rest:/docker-entrypoint-initdb.d
+  # db3:
+  #   image: mysql:latest
+  #   ports:
+  #     - "${DB3_PORT}:3306"
+  #   environment:
+  #     - MYSQL_DATABASE=${DB3_DATABASE}
+  #     - MYSQL_USER=${DB3_USER}
+  #     - MYSQL_PASSWORD=${DB3_PASSWORD}
+  #     - MYSQL_ALLOW_EMPTY_PASSWORD=1
+  #   volumes:
+  #     - ./db/init_rest:/docker-entrypoint-initdb.d
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - "${PMA_PORT}:80"
-    environment:
-      - PMA_HOSTS=db1,db2,db3
-      - PMA_PORT=3306
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   ports:
+  #     - "8001:80"
+  #   environment:
+  #     - PMA_HOSTS=db1,db2,db3
+  #     - PMA_PORT=3306
