@@ -47,5 +47,5 @@ services:
     ports:
       - "8001:80"
     environment:
-      - PMA_HOSTS=mhslvl-rest-db,mhslvl-soap_db,mhslvl-app-db
+      - PMA_HOSTS=mhslvl-rest-db,mhslvl-soap-db,mhslvl-app-db
       - PMA_PORT=3306
